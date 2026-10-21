@@ -27,7 +27,17 @@
 
 ## Diagrama de clases
 
-*(Pendiente: fuente en `uml/`.)*
+Fuente: [`uml/compositeE1.puml`](uml/compositeE1.puml).
+
+![Diagrama de clases del escenario 1](uml/diagrama-clases.png)
+
+| Relación | Notación | Significado |
+|---|---|---|
+| `ElementoPresupuestario` ← `PartidaPresupuestaria`, `GrupoPresupuestario` | herencia | partidas y grupos comparten la misma abstracción, así el cliente no distingue entre ambos |
+| `GrupoPresupuestario` ◆→ `ElementoPresupuestario` (`1` → `0..*`, «elementos») | composición | el grupo contiene partidas u otros grupos y los gestiona; es la relación recursiva que forma el árbol |
+| `ConsultaPresupuesto` ⇢ `ElementoPresupuestario` («usa») | dependencia | el cliente recibe un `Component` por parámetro y no sabe si es partida o grupo |
+
+Decidimos que `agregar` y `eliminar` queden solo en `GrupoPresupuestario`: una partida no tiene hijos y no debería ofrecer esas operaciones.
 
 ## Código fuente
 

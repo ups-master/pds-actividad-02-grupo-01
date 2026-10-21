@@ -27,7 +27,19 @@
 
 ## Diagrama de clases
 
-*(Pendiente: fuente en `uml/`.)*
+Fuente: [`uml/adapterE2.puml`](uml/adapterE2.puml).
+
+![Diagrama de clases del escenario 2](uml/diagrama-clases.png)
+
+| Relación | Notación | Significado |
+|---|---|---|
+| `ServicioAsistencia` ← `BiometricoInstitucional`, `TerminalHuellaAdapter` | realización | el proveedor anterior y el adaptador cumplen el mismo contrato del sistema |
+| `TerminalHuellaAdapter` → `SdkTerminalHuella` (`*` → `1`, «adapta») | asociación | el adaptador guarda el SDK del fabricante (atributo `adaptado`) y le delega las llamadas |
+| `SdkTerminalHuella` ⇢ `MarcacionTerminal` («devuelve») | dependencia | tipo propio del fabricante que el adaptador debe convertir |
+| `ServicioAsistencia` ⇢ `RegistroAsistencia` («devuelve») | dependencia | datos normalizados que espera el sistema |
+| `SistemaAsistencia` → `ServicioAsistencia` («usa») | asociación | el cliente solo conoce el Target, nunca el SDK |
+
+`SdkTerminalHuella` es la biblioteca del fabricante: no la modificamos, el adaptador la usa tal cual.
 
 ## Código fuente
 
