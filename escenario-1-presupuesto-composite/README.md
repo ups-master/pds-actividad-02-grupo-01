@@ -97,10 +97,21 @@ Supuestos que el enunciado no define. Los propuso la IA durante la corrección y
 
 ## Diagrama de clases
 
-Fuente: [`uml/compositeE1_mejorado.puml`](uml/compositeE1_mejorado.puml). La versión anterior
-(`compositeE1.puml`) se conserva en el historial de git.
+Hay dos versiones. La **versión 1** es la primera propuesta del grupo y no se implementó. La
+**versión 2** incorpora las recomendaciones que el grupo aceptó o modificó; es la que implementa el
+código y la que verifica `CorrespondenciaUmlCodigoTest`.
 
-![Diagrama de clases del escenario 1](uml/diagrama-clases.png)
+### Versión 1: diagrama original
+
+Fuente: [`uml/compositeE1_original.puml`](uml/compositeE1_original.puml) (sin cambios desde la primera entrega).
+
+![Diagrama original del escenario 1](uml/diagrama-clases-original.png)
+
+### Versión 2: diagrama mejorado (implementado)
+
+Fuente: [`uml/compositeE1_mejorado.puml`](uml/compositeE1_mejorado.puml).
+
+![Diagrama mejorado del escenario 1](uml/diagrama-clases.png)
 
 | Relación | Notación | Significado |
 |---|---|---|
@@ -108,10 +119,24 @@ Fuente: [`uml/compositeE1_mejorado.puml`](uml/compositeE1_mejorado.puml). La ver
 | `GrupoPresupuestario` ◆→ `ElementoPresupuestario` (`1` → `0..*`, `elementos`) | composición | el grupo es dueño exclusivo de sus elementos; es la relación recursiva que forma el árbol |
 | `ConsultaPresupuesto` ⇢ `ElementoPresupuestario` («usa») | dependencia | el cliente recibe un Component por parámetro y no sabe si es partida o grupo |
 
-Cambios respecto de la primera versión: constructores en las tres clases del árbol, getter
-`getValorAsignado()`, método `formatearLinea` (sangría común) y `validarTexto`, método privado
-`contieneDescendiente` para detectar ciclos, y notas con las validaciones, la vista no modificable, la
-variante segura y la justificación de la composición.
+### Cambios de la versión 1 a la 2
+
+| Cambio en el diagrama | Recomendación | Decisión del grupo | Dónde se verifica |
+|---|---|---|---|
+| Constructores en `ElementoPresupuestario` (`#`), `PartidaPresupuestaria` y `GrupoPresupuestario` | Mostrar cómo se crean los objetos del árbol | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| `validarTexto` y notas de validación (código y descripción no vacíos, valor `>= 0`) | Documentar las validaciones | Aceptada | `rechazoDeValoresInvalidos` |
+| `getValorAsignado()` en la partida | Exponer el dato de la hoja | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| `formatearLinea(nivel)` en el Component | Sangría común para `mostrarEstructura` | Aceptada | `estructuraConSangria` |
+| Nota «`getElementos()`: vista no modificable» | No exponer la lista interna | Aceptada | `elementosNoModificables` |
+| `contieneDescendiente` y regla de ciclos y repetidos | Evitar que un grupo se agregue a sí mismo o a un descendiente | Aceptada | `rechazoDeCiclos` |
+| `agregar`/`eliminar` solo en `GrupoPresupuestario`, con nota | Variante segura del Composite | Aceptada (ya estaba en la v1; ahora se justifica) | `CorrespondenciaUmlCodigoTest` |
+| Relación grupo → elementos | La IA recomendó cambiar la composición por agregación | **Modificada**: se mantiene la composición, se justifica el ciclo de vida y se añade la regla de no repetidos | `rechazoDeCiclos` |
+| Parámetro `e` renombrado a `elemento`; `dpi 200` | Legibilidad | Aceptada | — |
+
+> Origen de cada cambio: las recomendaciones salieron de la revisión del docente y de la sesión con IA
+> (Claude Code, 22/10/2026). `[COMPLETAR POR EL GRUPO: confirmar el origen y la decisión de cada fila]`
+> Lo que el grupo **rechazó** no se dibuja en ningún diagrama: queda como texto en
+> [Uso crítico de inteligencia artificial](#uso-crítico-de-inteligencia-artificial).
 
 ## Consecuencias del patrón
 
@@ -210,6 +235,8 @@ No generes código todavía.
 
 ### Recomendación aceptada
 
+El resultado se ve en la [tabla de cambios de la versión 1 a la 2](#cambios-de-la-versión-1-a-la-2) del diagrama.
+
 **Dejar `agregar` y `eliminar` solo en `GrupoPresupuestario` (variante segura).**
 `[COMPLETAR POR EL GRUPO: confirmar que esta recomendación vino de la IA y en qué momento; si no, reemplazarla por la que sí se aceptó]`
 
@@ -220,6 +247,8 @@ agregar elementos a una partida. Aceptamos el costo de que quien arma el árbol 
 construcción.
 
 ### Recomendación modificada o rechazada
+
+Lo modificado aparece en el diagrama de la versión 2; lo rechazado queda solo en este texto.
 
 **La IA recomendó cambiar la composición por agregación; el grupo la rechazó y mantuvo la composición.**
 

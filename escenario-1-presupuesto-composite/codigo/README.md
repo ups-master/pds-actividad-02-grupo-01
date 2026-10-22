@@ -53,3 +53,9 @@ mvn dependency:get -Dartifact=net.sourceforge.plantuml:plantuml:1.2024.7
 java -DPLANTUML_LIMIT_SIZE=16384 -jar ~/.m2/repository/net/sourceforge/plantuml/plantuml/1.2024.7/plantuml-1.2024.7.jar -tpng -pipe < compositeE1_mejorado.puml > diagrama-clases.png
 ```
 
+El diagrama original (versión 1) no se edita; si hiciera falta volver a generar su imagen:
+
+```text
+java -jar ~/.m2/repository/net/sourceforge/plantuml/plantuml/1.2024.7/plantuml-1.2024.7.jar -Sdpi=200 -tpng -pipe < compositeE1_original.puml > diagrama-clases-original.png
+```
+

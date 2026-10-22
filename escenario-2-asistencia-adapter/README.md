@@ -100,10 +100,21 @@ Supuestos que el enunciado no define. Los propuso la IA durante la corrección y
 
 ## Diagrama de clases
 
-Fuente: [`uml/adapterE2_mejorado.puml`](uml/adapterE2_mejorado.puml). La versión anterior
-(`adapterE2.puml`) se conserva en el historial de git.
+Hay dos versiones. La **versión 1** es la primera propuesta del grupo y no se implementó. La
+**versión 2** incorpora las recomendaciones que el grupo aceptó o modificó; es la que implementa el
+código y la que verifica `CorrespondenciaUmlCodigoTest`.
 
-![Diagrama de clases del escenario 2](uml/diagrama-clases.png)
+### Versión 1: diagrama original
+
+Fuente: [`uml/adapterE2_original.puml`](uml/adapterE2_original.puml) (sin cambios desde la primera entrega).
+
+![Diagrama original del escenario 2](uml/diagrama-clases-original.png)
+
+### Versión 2: diagrama mejorado (implementado)
+
+Fuente: [`uml/adapterE2_mejorado.puml`](uml/adapterE2_mejorado.puml).
+
+![Diagrama mejorado del escenario 2](uml/diagrama-clases.png)
 
 | Relación | Notación | Significado |
 |---|---|---|
@@ -115,11 +126,26 @@ Fuente: [`uml/adapterE2_mejorado.puml`](uml/adapterE2_mejorado.puml). La versió
 | `SdkTerminalHuella` ⇢ `MarcacionTerminal`, `ErrorTerminalHuella` | dependencia | tipos propios que devuelve o lanza el fabricante |
 | `ServicioAsistencia` ⇢ `RegistroAsistencia`, `ConsultaAsistenciaException` | dependencia | resultado normalizado y error del dominio |
 
-Cambios respecto de la primera versión: constructores y getters en `RegistroAsistencia` y
-`MarcacionTerminal`, horas opcionales, constructor del adaptador con inyección de `SdkTerminalHuella` y
-`ZoneId`, métodos privados `convertir` y `traducir`, excepciones del fabricante y del dominio,
-dependencias del adaptador, nota con las reglas de transformación, marca de simulación del SDK y mayor
-resolución de la imagen.
+### Cambios de la versión 1 a la 2
+
+| Cambio en el diagrama | Recomendación | Decisión del grupo | Dónde se verifica |
+|---|---|---|---|
+| Constructor y getters en `RegistroAsistencia` y `MarcacionTerminal` | El adaptador debe poder leer y construir los datos | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| `getHoraIngreso()`/`getHoraSalida()` devuelven `Optional<LocalTime>` y nota de horas faltantes | Aclarar que las horas pueden faltar | Aceptada | `sinMarcaciones`, `registroCoherente` |
+| Constructor `TerminalHuellaAdapter(SdkTerminalHuella, ZoneId)` | Mostrar la inyección del SDK y la zona horaria | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| Asociación `adaptado` (composición de objetos, no herencia) | Adaptador de objetos en lugar de adaptador de clase | Aceptada (ya estaba en la v1; ahora se justifica) | `CorrespondenciaUmlCodigoTest` |
+| `ConsultaAsistenciaException`, `ErrorTerminalHuella` y `traducir` | Los errores del SDK no deben llegar al cliente | Aceptada | `errorDelSdkTraducido`, `elClienteNoConoceAlFabricante` |
+| Dependencias del adaptador hacia `MarcacionTerminal`, `RegistroAsistencia` y las excepciones; método `convertir` | Dibujar las dependencias que faltaban | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| Nota con las reglas de transformación | Documentar rango del día, orden, primera/última y casos sin marcaciones | Aceptada | `TerminalHuellaAdapterTest` |
+| Regla de la marcación única | Tratar la marcación única de otra forma (ver uso de IA) | **Modificada**: ingreso con salida vacía | `unaSolaMarcacion` |
+| `SdkTerminalHuella` con `cargarMarcacion` y estereotipo `<<SDK simulado>>`; `BiometricoInstitucional` con `registrar` | Marcar que el fabricante y el proveedor anterior son simulaciones | Aceptada | `CorrespondenciaUmlCodigoTest` |
+| Diagrama del tercer proveedor (aparte) | Mostrar cómo se incorpora otro fabricante sin tocar el cliente | Aceptada | — (hipotético) |
+| `dpi 160`, sin paquetes, imagen más grande | Legibilidad en el PDF | Aceptada | — |
+
+> Origen de cada cambio: las recomendaciones salieron de la revisión del docente y de la sesión con IA
+> (Claude Code, 22/10/2026). `[COMPLETAR POR EL GRUPO: confirmar el origen y la decisión de cada fila]`
+> Lo que el grupo **rechazó** no se dibuja en ningún diagrama: queda como texto en
+> [Uso crítico de inteligencia artificial](#uso-crítico-de-inteligencia-artificial).
 
 ## Incorporar un tercer proveedor
 
@@ -230,6 +256,8 @@ No generes código todavía.
 
 ### Recomendación aceptada
 
+El resultado se ve en la [tabla de cambios de la versión 1 a la 2](#cambios-de-la-versión-1-a-la-2) del diagrama.
+
 **Usar un adaptador de objetos (composición) en lugar de un adaptador de clase (herencia).**
 Esta recomendación figura en la primera versión del PDF como respuesta de la IA (ver arriba).
 `[COMPLETAR POR EL GRUPO: confirmar la herramienta y la respuesta original]`
@@ -240,6 +268,8 @@ cliente, el SDK se inyecta por constructor y en las pruebas se sustituye por una
 llegan otros proveedores, cada uno tendrá su adaptador sin modificar el resto.
 
 ### Recomendación modificada o rechazada
+
+Lo modificado aparece en el diagrama de la versión 2; lo rechazado queda solo en este texto.
 
 **Tratamiento de una marcación única.** `[COMPLETAR POR EL GRUPO: describir la sugerencia real que dio la IA]`
 

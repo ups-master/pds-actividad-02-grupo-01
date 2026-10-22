@@ -34,6 +34,8 @@ mvn test -Dtest=NombreDeLaClase#metodo
   `../uml/*_mejorado.puml` y lo compara con el código; si cambia una clase, actualizar el `.puml`,
   su imagen y la trazabilidad.
 - Clases auxiliares que no son participantes (`Demo`) se excluyen en `FUERA_DEL_MODELO` de esa prueba.
+- Dos diagramas por escenario: `*_original.puml` (primera entrega, no se edita ni se implementa) y
+  `*_mejorado.puml` (implementado). Lo rechazado de la IA no se dibuja, queda en el informe.
 - PNG: PlantUML 1.2024.7 + Graphviz; comando en `codigo/README.md` de cada escenario.
 - Texto de uso de IA y decisiones del grupo: no inventar evidencia; marcar `[COMPLETAR POR EL GRUPO]`.
 - El PDF de entrega lo regenera el grupo; `docs/checklist-pdf.md` lista lo que debe recoger.

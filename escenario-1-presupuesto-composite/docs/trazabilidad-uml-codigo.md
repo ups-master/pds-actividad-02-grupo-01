@@ -33,6 +33,12 @@ fuera del modelo.
 | Sin ciclos ni repetidos | `agregar` + `contieneDescendiente` | `rechazoDeCiclos` |
 | Sangría de 2 espacios por nivel | `formatearLinea`, `mostrarEstructura` | `estructuraConSangria` |
 
+## Versiones del diagrama
+
+El código y las pruebas corresponden a la **versión 2** (`*_mejorado.puml`). La versión 1
+([`uml/compositeE1_original.puml`](../uml/compositeE1_original.puml)) es la primera propuesta del grupo: se conserva como evidencia de la
+iteración, no se implementó y `CorrespondenciaUmlCodigoTest` no la lee.
+
 ## Fuera del modelo
 
 [`Demo.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/Demo.java) solo arma el ejemplo del enunciado; no es participante del patrón y está

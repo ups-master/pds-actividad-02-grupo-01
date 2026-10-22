@@ -14,8 +14,10 @@ docente (11 páginas, creada el 22/10/2026) con el estado actual del repositorio
 
 ## Escenario 01
 
-- [ ] Reemplazar el diagrama por `escenario-1-presupuesto-composite/uml/diagrama-clases.png` (3848 × 1462 px).
-  Insertarlo a todo el ancho de la página o en una página horizontal para que se lea.
+- [ ] Incluir **dos diagramas**: versión 1 `uml/diagrama-clases-original.png` (el que ya tenía el PDF, ahora a
+  200 dpi) y versión 2 `escenario-1-presupuesto-composite/uml/diagrama-clases.png` (3848 × 1462 px), seguidos
+  de la tabla «Cambios de la versión 1 a la 2» del `README.md`.
+  Insertarlos a todo el ancho de la página o en una página horizontal para que se lea.
 - [ ] Añadir las secciones nuevas del informe: variante segura (`agregar`/`eliminar` solo en el grupo),
   justificación de la composición, validaciones, supuestos y **consecuencias del patrón**.
 - [ ] Código fuente: además del enlace a la carpeta, citar el manual
@@ -29,7 +31,9 @@ docente (11 páginas, creada el 22/10/2026) con el estado actual del repositorio
 
 - [ ] Añadir la sección **Patrón seleccionado** (hoy falta: el PDF pasa de «Problema estructural» a
   «Participantes»).
-- [ ] Reemplazar el diagrama por `escenario-2-asistencia-adapter/uml/diagrama-clases.png` (4520 × 1801 px),
+- [ ] Incluir **dos diagramas**: versión 1 `uml/diagrama-clases-original.png` y versión 2
+  `escenario-2-asistencia-adapter/uml/diagrama-clases.png` (4520 × 1801 px), con la tabla «Cambios de la
+  versión 1 a la 2»;
   preferiblemente en página horizontal.
 - [ ] Añadir el diagrama del tercer proveedor `uml/diagrama-tercer-proveedor.png` con su explicación.
 - [ ] Añadir adaptador de objetos frente a adaptador de clase, **reglas de transformación** (incluida la

@@ -45,6 +45,12 @@ jerarquía de excepciones.
 | Error del SDK → `ConsultaAsistenciaException` con causa | `traducir` y `catch (RuntimeException)` | `errorDelSdkTraducido`, `falloInesperadoDelSdkTraducido`, `soloLlegaLaExcepcionDelDominio` |
 | Mismo contrato con ambos proveedores | `SistemaAsistencia` | `mismoResultadoConAmbosProveedores` |
 
+## Versiones del diagrama
+
+El código y las pruebas corresponden a la **versión 2** (`*_mejorado.puml`). La versión 1
+([`uml/adapterE2_original.puml`](../uml/adapterE2_original.puml)) es la primera propuesta del grupo: se conserva como evidencia de la
+iteración, no se implementó y `CorrespondenciaUmlCodigoTest` no la lee.
+
 ## Fuera del modelo
 
 [`Demo.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/Demo.java) solo muestra ambos proveedores; no es participante del patrón y está
