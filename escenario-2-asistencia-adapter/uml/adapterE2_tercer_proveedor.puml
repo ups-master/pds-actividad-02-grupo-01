@@ -1,0 +1,54 @@
+@startuml
+title Escenario 2 - Incorporacion de un tercer proveedor (extension hipotetica, no implementada)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam dpi 200
+skinparam defaultFontSize 12
+
+class SistemaAsistencia <<Client>> {
+    - servicio : ServicioAsistencia
+    --
+    + generarReporte(identificacion : String, fecha : LocalDate) : String
+}
+
+interface ServicioAsistencia <<Target>> {
+    + consultarAsistencia(identificacion : String, fecha : LocalDate) : RegistroAsistencia
+}
+
+class BiometricoInstitucional
+class TerminalHuellaAdapter <<Adapter>>
+class SdkTerminalHuella <<Adaptee>>
+
+class LectorFacialAdapter <<Adapter>> #honeydew {
+    - adaptado : ApiLectorFacial
+    - zonaHoraria : ZoneId
+    --
+    + LectorFacialAdapter(adaptado : ApiLectorFacial, zonaHoraria : ZoneId)
+    + consultarAsistencia(identificacion : String, fecha : LocalDate) : RegistroAsistencia
+}
+
+class ApiLectorFacial <<Adaptee>> #honeydew {
+    + eventosDelDia(cedula : String, dia : String) : EventoFacial[]
+}
+
+SistemaAsistencia --> ServicioAsistencia : servicio
+ServicioAsistencia <|.. BiometricoInstitucional
+ServicioAsistencia <|.. TerminalHuellaAdapter
+ServicioAsistencia <|.. LectorFacialAdapter
+TerminalHuellaAdapter --> SdkTerminalHuella : adaptado
+LectorFacialAdapter --> ApiLectorFacial : adaptado
+
+note right of SistemaAsistencia
+  No cambia: sigue dependiendo solo
+  de ServicioAsistencia.
+end note
+
+note bottom of LectorFacialAdapter
+  Clases nuevas (en verde): un Adapter y la
+  biblioteca del tercer fabricante.
+  Solo cambia el punto de ensamblaje
+  (quien construye SistemaAsistencia).
+end note
+
+@enduml

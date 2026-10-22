@@ -1,0 +1,132 @@
+@startuml
+title Escenario 2 - Asistencia de colaboradores con Adapter (version mejorada)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam dpi 160
+skinparam defaultFontSize 12
+
+interface ServicioAsistencia <<Target>> {
+    + consultarAsistencia(identificacion : String, fecha : LocalDate) : RegistroAsistencia
+}
+
+class RegistroAsistencia {
+    - identificacion : String
+    - fecha : LocalDate
+    - horaIngreso : LocalTime
+    - horaSalida : LocalTime
+    --
+    + RegistroAsistencia(identificacion : String, fecha : LocalDate, horaIngreso : LocalTime, horaSalida : LocalTime)
+    + getIdentificacion() : String
+    + getFecha() : LocalDate
+    + getHoraIngreso() : Optional<LocalTime>
+    + getHoraSalida() : Optional<LocalTime>
+}
+
+class ConsultaAsistenciaException <<RuntimeException>> {
+    + ConsultaAsistenciaException(mensaje : String, causa : Throwable)
+}
+
+class BiometricoInstitucional {
+    - registros : Map<String, RegistroAsistencia>
+    --
+    + BiometricoInstitucional()
+    + registrar(registro : RegistroAsistencia) : void
+    + consultarAsistencia(identificacion : String, fecha : LocalDate) : RegistroAsistencia
+    - {static} clave(identificacion : String, fecha : LocalDate) : String
+}
+
+class SistemaAsistencia <<Client>> {
+    - servicio : ServicioAsistencia
+    --
+    + SistemaAsistencia(servicio : ServicioAsistencia)
+    + generarReporte(identificacion : String, fecha : LocalDate) : String
+    - {static} formatear(hora : Optional<LocalTime>) : String
+}
+
+class TerminalHuellaAdapter <<Adapter>> {
+    - adaptado : SdkTerminalHuella
+    - zonaHoraria : ZoneId
+    --
+    + TerminalHuellaAdapter(adaptado : SdkTerminalHuella, zonaHoraria : ZoneId)
+    + consultarAsistencia(identificacion : String, fecha : LocalDate) : RegistroAsistencia
+    - convertir(identificacion : String, fecha : LocalDate, marcaciones : List<MarcacionTerminal>) : RegistroAsistencia
+    - traducir(error : ErrorTerminalHuella) : ConsultaAsistenciaException
+}
+
+class SdkTerminalHuella <<Adaptee>> <<SDK simulado>> {
+    - marcaciones : List<MarcacionTerminal>
+    --
+    + SdkTerminalHuella()
+    + cargarMarcacion(marcacion : MarcacionTerminal) : void
+    + recuperarMarcaciones(codigoUsuario : String, desdeEpochMs : long, hastaEpochMs : long) : List<MarcacionTerminal>
+}
+
+class MarcacionTerminal <<SDK simulado>> {
+    - codigoUsuario : String
+    - instanteEpochMs : long
+    - idTerminal : String
+    --
+    + MarcacionTerminal(codigoUsuario : String, instanteEpochMs : long, idTerminal : String)
+    + getCodigoUsuario() : String
+    + getInstanteEpochMs() : long
+    + getIdTerminal() : String
+}
+
+class ErrorTerminalHuella <<SDK simulado>> <<Exception>> {
+    + ErrorTerminalHuella(mensaje : String)
+}
+
+ServicioAsistencia <|.. BiometricoInstitucional
+ServicioAsistencia <|.. TerminalHuellaAdapter
+' atributo TerminalHuellaAdapter.adaptado: adaptador de objetos (composicion, no herencia)
+TerminalHuellaAdapter "*" --> "1" SdkTerminalHuella : adaptado
+' atributo SistemaAsistencia.servicio: solo conoce el Target
+SistemaAsistencia --> ServicioAsistencia : servicio
+' almacenamiento en memoria del proveedor anterior (simulado)
+BiometricoInstitucional --> RegistroAsistencia : registros
+ServicioAsistencia ..> RegistroAsistencia : devuelve
+ServicioAsistencia ..> ConsultaAsistenciaException : lanza
+SdkTerminalHuella ..> MarcacionTerminal : devuelve
+SdkTerminalHuella ..> ErrorTerminalHuella : lanza
+TerminalHuellaAdapter ..> MarcacionTerminal : lee
+TerminalHuellaAdapter ..> RegistroAsistencia : construye
+TerminalHuellaAdapter ..> ErrorTerminalHuella : captura
+TerminalHuellaAdapter ..> ConsultaAsistenciaException : traduce a
+
+note left of RegistroAsistencia
+  horaIngreso y horaSalida pueden faltar:
+  el constructor acepta null y los getters
+  devuelven Optional.empty().
+  No hay salida sin ingreso; salida >= ingreso.
+end note
+
+note right of TerminalHuellaAdapter
+  Reglas de transformacion:
+  1. fecha -> [00:00, 24:00) en zonaHoraria, en epoch ms
+     (fecha.atStartOfDay(zona) .. fecha+1 dia).
+  2. Ordena las marcaciones por instante.
+  3. Primera = horaIngreso, ultima = horaSalida.
+  4. Sin marcaciones -> registro sin horas.
+  5. Una marcacion -> ingreso con salida vacia.
+  6. ErrorTerminalHuella o RuntimeException del SDK ->
+     ConsultaAsistenciaException (conserva la causa).
+  Ningun tipo del fabricante llega a SistemaAsistencia.
+end note
+
+note right of SdkTerminalHuella
+  SIMULACION de la biblioteca del fabricante.
+  Devuelve las marcaciones de [desde, hasta)
+  en el orden en que se cargaron (sin ordenar).
+end note
+
+legend right
+  <<Target>> contrato que ya usa el sistema institucional
+  <<Adaptee>> biblioteca del fabricante, no se modifica
+  <<Adapter>> implementa el Target y traduce las llamadas al Adaptee
+  <<Client>> trabaja solo con el Target
+  <<SDK simulado>> simulacion de la biblioteca del fabricante
+  Tercer proveedor: ver adapterE2_tercer_proveedor.puml
+endlegend
+
+@enduml
