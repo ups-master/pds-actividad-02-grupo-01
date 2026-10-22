@@ -118,7 +118,7 @@ Observamos que la IA tiende a proponer listas de alternativas o cambios genéric
 ```text
 .
 ├── README.md                              Este archivo
-├── CLAUDE.md                              Guía para Claude Code
+├── AGENTS.md                              Guía para agentes de código
 ├── pom.xml                                POM padre: Java 21 y JUnit para los dos módulos
 ├── docs/
 │   ├── actividad_02_patrones_estructurales.md   Enunciado y plantilla de la actividad
