@@ -30,7 +30,10 @@ mvn test -Dtest=NombreDeLaClase#metodo
 
 - Código, comentarios y mensajes en español; ASCII sin tildes en mensajes de excepción.
 - Paquetes Java: `ec.edu.ups.pds.composite` y `ec.edu.ups.pds.adapter`.
-- El UML es contrato: cada escenario tendrá una prueba `CorrespondenciaUmlCodigoTest` que lee
+- El UML es contrato: cada escenario tiene una prueba `CorrespondenciaUmlCodigoTest` que lee
   `../uml/*_mejorado.puml` y lo compara con el código; si cambia una clase, actualizar el `.puml`,
   su imagen y la trazabilidad.
-- Estructura recién creada: aún no hay clases, UML ni pruebas.
+- Clases auxiliares que no son participantes (`Demo`) se excluyen en `FUERA_DEL_MODELO` de esa prueba.
+- PNG: PlantUML 1.2024.7 + Graphviz; comando en `codigo/README.md` de cada escenario.
+- Texto de uso de IA y decisiones del grupo: no inventar evidencia; marcar `[COMPLETAR POR EL GRUPO]`.
+- El PDF de entrega lo regenera el grupo; `docs/checklist-pdf.md` lista lo que debe recoger.
