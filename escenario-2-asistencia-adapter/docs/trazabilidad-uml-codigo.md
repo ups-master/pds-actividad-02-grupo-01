@@ -10,12 +10,12 @@ jerarquía de excepciones.
 | Rol Adapter | Elemento UML | Implementación Java | Verificación |
 |---|---|---|---|
 | Target | `interface ServicioAsistencia` | [`ServicioAsistencia.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/ServicioAsistencia.java) | CUC; `SistemaAsistenciaTest.elClienteNoConoceAlFabricante` |
-| Target (datos) | `class RegistroAsistencia` | [`RegistroAsistencia.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/RegistroAsistencia.java) | CUC; `TerminalHuellaAdapterTest.registroCoherente` |
-| Target (error) | `class ConsultaAsistenciaException <<RuntimeException>>` | [`ConsultaAsistenciaException.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/ConsultaAsistenciaException.java) | CUC; `errorDelSdkTraducido` |
-| Implementación existente del Target | `class BiometricoInstitucional` (simulación) | [`BiometricoInstitucional.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/BiometricoInstitucional.java) | CUC; `mismoResultadoConAmbosProveedores` |
-| Adaptee | `class SdkTerminalHuella <<Adaptee>> <<SDK simulado>>` | [`SdkTerminalHuella.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/SdkTerminalHuella.java) | CUC; `sinMarcaciones`, `bordeDeZonaHoraria` |
+| Target (datos) | `class RegistroAsistencia` | [`RegistroAsistencia.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/RegistroAsistencia.java) | CUC; `RegistroAsistenciaTest.registroCoherente`, `RegistroAsistenciaTest.horasOpcionales` |
+| Target (error) | `class ConsultaAsistenciaException <<RuntimeException>>` | [`ConsultaAsistenciaException.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/ConsultaAsistenciaException.java) | CUC; `TerminalHuellaAdapterTest.errorDelSdkTraducido` |
+| Implementación existente del Target | `class BiometricoInstitucional` (simulación) | [`BiometricoInstitucional.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/BiometricoInstitucional.java) | CUC; `SistemaAsistenciaTest.mismoResultadoConAmbosProveedores` |
+| Adaptee | `class SdkTerminalHuella <<Adaptee>> <<SDK simulado>>` | [`SdkTerminalHuella.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/SdkTerminalHuella.java) | CUC; `TerminalHuellaAdapterTest.sinMarcaciones`, `TerminalHuellaAdapterTest.bordeDeZonaHoraria` |
 | Adaptee (datos) | `class MarcacionTerminal <<SDK simulado>>` | [`MarcacionTerminal.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/MarcacionTerminal.java) | CUC |
-| Adaptee (error) | `class ErrorTerminalHuella <<SDK simulado>> <<Exception>>` | [`ErrorTerminalHuella.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/ErrorTerminalHuella.java) | CUC; `errorDelSdkTraducido` |
+| Adaptee (error) | `class ErrorTerminalHuella <<SDK simulado>> <<Exception>>` | [`ErrorTerminalHuella.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/ErrorTerminalHuella.java) | CUC; `TerminalHuellaAdapterTest.errorDelSdkTraducido` |
 | Adapter | `class TerminalHuellaAdapter` | [`TerminalHuellaAdapter.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/TerminalHuellaAdapter.java) | CUC; todas las pruebas de `TerminalHuellaAdapterTest` |
 | Client | `class SistemaAsistencia` | [`SistemaAsistencia.java`](../codigo/src/main/java/ec/edu/ups/pds/adapter/SistemaAsistencia.java) | CUC; `SistemaAsistenciaTest` |
 
@@ -38,12 +38,12 @@ jerarquía de excepciones.
 
 | Regla | Código | Prueba |
 |---|---|---|
-| Fecha → `[00:00, 24:00)` de la zona, en ms | `consultarAsistencia` | `bordeDeZonaHoraria`, `laZonaHorariaDefineElDia` |
-| Ordenar por instante; primera = ingreso, última = salida | `convertir` | `variasMarcacionesDesordenadas` |
-| Sin marcaciones → registro sin horas | `convertir` | `sinMarcaciones` |
-| Una marcación → ingreso, salida vacía | `convertir` | `unaSolaMarcacion` |
-| Error del SDK → `ConsultaAsistenciaException` con causa | `traducir` y `catch (RuntimeException)` | `errorDelSdkTraducido`, `falloInesperadoDelSdkTraducido`, `soloLlegaLaExcepcionDelDominio` |
-| Mismo contrato con ambos proveedores | `SistemaAsistencia` | `mismoResultadoConAmbosProveedores` |
+| Fecha → `[00:00, 24:00)` de la zona, en ms | `consultarAsistencia` | `TerminalHuellaAdapterTest.bordeDeZonaHoraria`, `TerminalHuellaAdapterTest.laZonaHorariaDefineElDia` |
+| Ordenar por instante; primera = ingreso, última = salida | `convertir` | `TerminalHuellaAdapterTest.variasMarcacionesDesordenadas` |
+| Sin marcaciones → registro sin horas | `convertir` | `TerminalHuellaAdapterTest.sinMarcaciones` |
+| Una marcación → ingreso, salida vacía | `convertir` | `TerminalHuellaAdapterTest.unaSolaMarcacion` |
+| Error del SDK → `ConsultaAsistenciaException` con causa | `traducir` y `catch (RuntimeException)` | `TerminalHuellaAdapterTest.errorDelSdkTraducido`, `TerminalHuellaAdapterTest.falloInesperadoDelSdkTraducido`, `SistemaAsistenciaTest.soloLlegaLaExcepcionDelDominio` |
+| Mismo contrato con ambos proveedores | `SistemaAsistencia` | `SistemaAsistenciaTest.mismoResultadoConAmbosProveedores` |
 
 ## Versiones del diagrama
 

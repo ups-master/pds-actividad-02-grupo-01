@@ -8,10 +8,10 @@ fuera del modelo.
 
 | Rol Composite | Elemento UML | Implementación Java | Verificación |
 |---|---|---|---|
-| Component | `abstract class ElementoPresupuestario` | [`ElementoPresupuestario.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/ElementoPresupuestario.java) | CUC; `PresupuestoCompositeTest.rechazoDeValoresInvalidos` |
-| Leaf | `class PartidaPresupuestaria` | [`PartidaPresupuestaria.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/PartidaPresupuestaria.java) | CUC; `valorTotalDeUnaPartida`, `rechazoDeValoresInvalidos` |
-| Composite | `class GrupoPresupuestario` | [`GrupoPresupuestario.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/GrupoPresupuestario.java) | CUC; `grupoConPartidas`, `gruposAnidadosAVariosNiveles`, `grupoVacio`, `agregarYEliminar`, `elementosNoModificables`, `rechazoDeCiclos`, `estructuraConSangria` |
-| Client | `class ConsultaPresupuesto` | [`ConsultaPresupuesto.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/ConsultaPresupuesto.java) | CUC; `clienteUniformeConPartidaYGrupo`, `nuevoNivelSinModificarElCliente` |
+| Component | `abstract class ElementoPresupuestario` | [`ElementoPresupuestario.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/ElementoPresupuestario.java) | CUC; `PartidaPresupuestariaTest.rechazoDeValoresInvalidos`, `GrupoPresupuestarioTest.rechazoDeValoresInvalidos` |
+| Leaf | `class PartidaPresupuestaria` | [`PartidaPresupuestaria.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/PartidaPresupuestaria.java) | CUC; `PartidaPresupuestariaTest.valorTotalDeUnaPartida`, `PartidaPresupuestariaTest.rechazoDeValoresInvalidos` |
+| Composite | `class GrupoPresupuestario` | [`GrupoPresupuestario.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/GrupoPresupuestario.java) | CUC; `GrupoPresupuestarioTest.grupoConPartidas`, `GrupoPresupuestarioTest.gruposAnidadosAVariosNiveles`, `GrupoPresupuestarioTest.grupoVacio`, `GrupoPresupuestarioTest.agregarYEliminar`, `GrupoPresupuestarioTest.elementosNoModificables`, `GrupoPresupuestarioTest.rechazoDeCiclos`, `GrupoPresupuestarioTest.estructuraConSangria` |
+| Client | `class ConsultaPresupuesto` | [`ConsultaPresupuesto.java`](../codigo/src/main/java/ec/edu/ups/pds/composite/ConsultaPresupuesto.java) | CUC; `ConsultaPresupuestoTest.clienteUniformeConPartidaYGrupo`, `ConsultaPresupuestoTest.nuevoNivelSinModificarElCliente` |
 
 ## Relaciones
 
@@ -26,12 +26,12 @@ fuera del modelo.
 
 | Regla | Código | Prueba |
 |---|---|---|
-| Código y descripción no nulos ni vacíos | `ElementoPresupuestario.validarTexto` | `rechazoDeValoresInvalidos` |
-| Valor asignado no nulo y `>= 0` | constructor de `PartidaPresupuestaria` | `rechazoDeValoresInvalidos` |
-| Total recursivo con `BigDecimal`; grupo vacío = 0 | `GrupoPresupuestario.calcularValorTotal` | `gruposAnidadosAVariosNiveles`, `grupoVacio` |
-| `getElementos()` no modificable | `Collections.unmodifiableList` | `elementosNoModificables` |
-| Sin ciclos ni repetidos | `agregar` + `contieneDescendiente` | `rechazoDeCiclos` |
-| Sangría de 2 espacios por nivel | `formatearLinea`, `mostrarEstructura` | `estructuraConSangria` |
+| Código y descripción no nulos ni vacíos | `ElementoPresupuestario.validarTexto` | `PartidaPresupuestariaTest.rechazoDeValoresInvalidos`, `GrupoPresupuestarioTest.rechazoDeValoresInvalidos` |
+| Valor asignado no nulo y `>= 0` | constructor de `PartidaPresupuestaria` | `PartidaPresupuestariaTest.rechazoDeValoresInvalidos` |
+| Total recursivo con `BigDecimal`; grupo vacío = 0 | `GrupoPresupuestario.calcularValorTotal` | `GrupoPresupuestarioTest.gruposAnidadosAVariosNiveles`, `GrupoPresupuestarioTest.grupoVacio` |
+| `getElementos()` no modificable | `Collections.unmodifiableList` | `GrupoPresupuestarioTest.elementosNoModificables` |
+| Sin ciclos ni repetidos | `agregar` + `contieneDescendiente` | `GrupoPresupuestarioTest.rechazoDeCiclos` |
+| Sangría de 2 espacios por nivel | `formatearLinea`, `mostrarEstructura` | `GrupoPresupuestarioTest.estructuraConSangria` |
 
 ## Versiones del diagrama
 

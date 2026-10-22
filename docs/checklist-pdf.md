@@ -49,7 +49,7 @@ docente (11 páginas, creada el 22/10/2026) con el estado actual del repositorio
 
 ## Verificación final
 
-- [ ] `mvn test` pasa desde la raíz (34 pruebas).
+- [ ] `mvn test` pasa desde la raíz (36 pruebas).
 - [ ] El enlace al repositorio (`https://github.com/ups-master/pds-actividad-02-grupo-01`) abre y la rama
   `main` contiene los últimos commits.
 - [ ] No queda ningún `[COMPLETAR POR EL GRUPO]` en el PDF.

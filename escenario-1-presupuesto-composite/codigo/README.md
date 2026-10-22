@@ -3,6 +3,33 @@
 Requisitos: JDK 21 o superior y Maven 3.9 o posterior. Los comandos de esta sección se lanzan desde
 esta carpeta (`escenario-1-presupuesto-composite/codigo`); al final están los equivalentes desde la raíz del repositorio.
 
+## Estructura del código
+
+Un solo paquete, `ec.edu.ups.pds.composite`; cada clase de producción tiene su clase de prueba.
+
+```text
+src/main/java/ec/edu/ups/pds/composite/
+├── ElementoPresupuestario.java     Component (abstracta)
+├── PartidaPresupuestaria.java      Leaf
+├── GrupoPresupuestario.java        Composite
+├── ConsultaPresupuesto.java        Client
+└── Demo.java                       auxiliar: ejemplo del enunciado (fuera del UML)
+src/test/java/ec/edu/ups/pds/composite/
+├── PartidaPresupuestariaTest.java
+├── GrupoPresupuestarioTest.java
+├── ConsultaPresupuestoTest.java
+├── CorrespondenciaUmlCodigoTest.java   UML mejorado <-> código
+└── PresupuestoDeEjemplo.java       auxiliar de pruebas: árbol del enunciado
+```
+
+| Clase | Rol | Prueba |
+|---|---|---|
+| `ElementoPresupuestario` | Component | se prueba a través de sus subclases; `CorrespondenciaUmlCodigoTest` |
+| `PartidaPresupuestaria` | Leaf | `PartidaPresupuestariaTest` (2) |
+| `GrupoPresupuestario` | Composite | `GrupoPresupuestarioTest` (8) |
+| `ConsultaPresupuesto` | Client | `ConsultaPresupuestoTest` (2) |
+| `Demo` | auxiliar | se ejecuta con `java` (ver abajo) |
+
 ## Compilar
 
 ```text
@@ -15,7 +42,8 @@ mvn compile
 mvn test
 ```
 
-Ejecuta 16 pruebas: 11 de comportamiento (`PresupuestoCompositeTest`) y 5 de correspondencia UML-código. La prueba `CorrespondenciaUmlCodigoTest` lee `../uml/compositeE1_mejorado.puml`, así que hay que lanzarla desde
+Ejecuta 17 pruebas: 12 de comportamiento (`PartidaPresupuestariaTest`, `GrupoPresupuestarioTest`,
+`ConsultaPresupuestoTest`) y 5 de correspondencia UML-código. La prueba `CorrespondenciaUmlCodigoTest` lee `../uml/compositeE1_mejorado.puml`, así que hay que lanzarla desde
 esta carpeta o desde la raíz con `-pl` (Maven usa la carpeta del módulo como directorio de trabajo).
 
 Una sola clase o un solo método:

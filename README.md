@@ -70,7 +70,7 @@ Requisitos: JDK 21 o superior y Maven 3.9 o posterior.
 mvn test
 ```
 
-Ejecuta 34 pruebas JUnit (16 del escenario 1 y 18 del escenario 2), incluida en cada módulo
+Ejecuta 36 pruebas JUnit (17 del escenario 1 y 19 del escenario 2), incluida en cada módulo
 `CorrespondenciaUmlCodigoTest`, que compara el diagrama `uml/*_mejorado.puml` con el código. Para un
 solo escenario: `mvn test -pl escenario-1-presupuesto-composite/codigo` o
 `mvn test -pl escenario-2-asistencia-adapter/codigo`. Cada manual de uso (`codigo/README.md`) explica
@@ -101,12 +101,32 @@ Observamos que la IA tiende a proponer listas de alternativas o cambios genéric
 │   └── checklist-pdf.md                   Cambios que debe recoger el PDF
 ├── escenario-1-presupuesto-composite/
 │   ├── README.md                          Informe del escenario 1
-│   ├── uml/                               Diagramas PlantUML e imágenes
-│   ├── codigo/                            Proyecto Maven y manual de uso
-│   └── docs/                              Trazabilidad UML-código
+│   ├── uml/
+│   │   ├── compositeE1_original.puml      Versión 1: primera propuesta (no implementada)
+│   │   ├── diagrama-clases-original.png
+│   │   ├── compositeE1_mejorado.puml      Versión 2: la que implementa el código
+│   │   └── diagrama-clases.png
+│   ├── codigo/
+│   │   ├── README.md                      Manual: estructura, compilar, probar, demo
+│   │   ├── pom.xml
+│   │   └── src/
+│   │       ├── main/java/ec/edu/ups/pds/composite/   Clases del patrón y Demo
+│   │       └── test/java/ec/edu/ups/pds/composite/   Una prueba por clase + correspondencia UML
+│   └── docs/trazabilidad-uml-codigo.md    Rol, elemento UML, clase y prueba
 └── escenario-2-asistencia-adapter/
     ├── README.md                          Informe del escenario 2
     ├── uml/
+    │   ├── adapterE2_original.puml        Versión 1: primera propuesta (no implementada)
+    │   ├── diagrama-clases-original.png
+    │   ├── adapterE2_mejorado.puml        Versión 2: la que implementa el código
+    │   ├── diagrama-clases.png
+    │   ├── adapterE2_tercer_proveedor.puml  Extensión hipotética (no implementada)
+    │   └── diagrama-tercer-proveedor.png
     ├── codigo/
-    └── docs/
+    │   ├── README.md                      Manual: estructura, compilar, probar, demo
+    │   ├── pom.xml
+    │   └── src/
+    │       ├── main/java/ec/edu/ups/pds/adapter/     Clases del patrón, simulaciones y Demo
+    │       └── test/java/ec/edu/ups/pds/adapter/     Una prueba por clase + correspondencia UML
+    └── docs/trazabilidad-uml-codigo.md    Rol, elemento UML, clase y prueba
 ```

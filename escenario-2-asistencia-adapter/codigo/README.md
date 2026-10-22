@@ -3,6 +3,39 @@
 Requisitos: JDK 21 o superior y Maven 3.9 o posterior. Los comandos de esta sección se lanzan desde
 esta carpeta (`escenario-2-asistencia-adapter/codigo`); al final están los equivalentes desde la raíz del repositorio.
 
+## Estructura del código
+
+Un solo paquete, `ec.edu.ups.pds.adapter`; cada clase con lógica propia tiene su clase de prueba.
+
+```text
+src/main/java/ec/edu/ups/pds/adapter/
+├── ServicioAsistencia.java          Target (interfaz)
+├── RegistroAsistencia.java          datos del Target
+├── ConsultaAsistenciaException.java error del dominio
+├── SistemaAsistencia.java           Client
+├── BiometricoInstitucional.java     proveedor anterior (SIMULACION)
+├── SdkTerminalHuella.java           Adaptee (SIMULACION del SDK del fabricante)
+├── MarcacionTerminal.java           tipo del fabricante (SIMULACION)
+├── ErrorTerminalHuella.java         excepción del fabricante (SIMULACION)
+├── TerminalHuellaAdapter.java       Adapter
+└── Demo.java                        auxiliar: ambos proveedores (fuera del UML)
+src/test/java/ec/edu/ups/pds/adapter/
+├── RegistroAsistenciaTest.java
+├── TerminalHuellaAdapterTest.java
+├── SistemaAsistenciaTest.java
+└── CorrespondenciaUmlCodigoTest.java    UML mejorado <-> código
+```
+
+| Clase | Rol | Prueba |
+|---|---|---|
+| `ServicioAsistencia` | Target | `SistemaAsistenciaTest` (con ambos proveedores) |
+| `RegistroAsistencia` | datos del Target | `RegistroAsistenciaTest` (2) |
+| `TerminalHuellaAdapter` | Adapter | `TerminalHuellaAdapterTest` (8) |
+| `SistemaAsistencia` | Client | `SistemaAsistenciaTest` (4) |
+| `BiometricoInstitucional`, `SdkTerminalHuella`, `MarcacionTerminal`, `ErrorTerminalHuella` | simulaciones | se usan como datos de prueba en las clases anteriores |
+| `ConsultaAsistenciaException` | error del dominio | `TerminalHuellaAdapterTest`, `SistemaAsistenciaTest` |
+| `Demo` | auxiliar | se ejecuta con `java` (ver abajo) |
+
 ## Compilar
 
 ```text
@@ -15,7 +48,8 @@ mvn compile
 mvn test
 ```
 
-Ejecuta 18 pruebas: 9 del adaptador (`TerminalHuellaAdapterTest`), 4 del cliente (`SistemaAsistenciaTest`) y 5 de correspondencia UML-código. La prueba `CorrespondenciaUmlCodigoTest` lee `../uml/adapterE2_mejorado.puml`, así que hay que lanzarla desde
+Ejecuta 19 pruebas: 8 del adaptador (`TerminalHuellaAdapterTest`), 2 del registro (`RegistroAsistenciaTest`),
+4 del cliente (`SistemaAsistenciaTest`) y 5 de correspondencia UML-código. La prueba `CorrespondenciaUmlCodigoTest` lee `../uml/adapterE2_mejorado.puml`, así que hay que lanzarla desde
 esta carpeta o desde la raíz con `-pl` (Maven usa la carpeta del módulo como directorio de trabajo).
 
 Una sola clase o un solo método:
