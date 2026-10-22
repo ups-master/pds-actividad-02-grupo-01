@@ -38,4 +38,4 @@ mvn test -Dtest=NombreDeLaClase#metodo
   `*_mejorado.puml` (implementado). Lo rechazado de la IA no se dibuja, queda en el informe.
 - PNG: PlantUML 1.2024.7 + Graphviz; comando en `codigo/README.md` de cada escenario.
 - Texto de uso de IA y decisiones del grupo: no inventar evidencia; marcar `[COMPLETAR POR EL GRUPO]`.
-- El PDF de entrega lo regenera el grupo; `docs/checklist-pdf.md` lista lo que debe recoger.
+- El PDF de entrega lo regenera el grupo.

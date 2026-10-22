@@ -24,8 +24,7 @@
 
 ### Entregables
 
-- Archivo en PDF con el nombre `PDS_Actividad_02_Grupo01.pdf` (lo regenera el grupo; ver
-  [`docs/checklist-pdf.md`](docs/checklist-pdf.md)).
+- Archivo en PDF con el nombre `PDS_Actividad_02_Grupo01.pdf` (lo regenera el grupo).
 - Repositorio: <https://github.com/ups-master/pds-actividad-02-grupo-01>
 - Aplicación de software almacenada en un repositorio de código (este repositorio).
 - La actividad se desarrolla en grupo; la carga al AVAC es individual.
@@ -121,8 +120,7 @@ Observamos que la IA tiende a proponer listas de alternativas o cambios genéric
 ├── AGENTS.md                              Guía para agentes de código
 ├── pom.xml                                POM padre: Java 21 y JUnit para los dos módulos
 ├── docs/
-│   ├── actividad_02_patrones_estructurales.md   Enunciado y plantilla de la actividad
-│   └── checklist-pdf.md                   Cambios que debe recoger el PDF
+│   └── actividad_02_patrones_estructurales.md   Enunciado y plantilla de la actividad
 ├── escenario-1-presupuesto-composite/
 │   ├── README.md                          Informe del escenario 1
 │   ├── uml/
