@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/** Adapter: reglas de transformacion y traduccion de errores del SDK. */
 class TerminalHuellaAdapterTest {
 
     private static final ZoneId GUAYAQUIL = ZoneId.of("America/Guayaquil");
@@ -151,16 +152,5 @@ class TerminalHuellaAdapterTest {
         assertThrows(IllegalArgumentException.class, () -> adaptador.consultarAsistencia(COLABORADOR, null));
         assertThrows(IllegalArgumentException.class, () -> new TerminalHuellaAdapter(null, GUAYAQUIL));
         assertThrows(IllegalArgumentException.class, () -> new TerminalHuellaAdapter(sdk, null));
-    }
-
-    @Test
-    @DisplayName("RegistroAsistencia valida la coherencia de las horas")
-    void registroCoherente() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new RegistroAsistencia(COLABORADOR, FECHA, null, LocalTime.NOON));
-        assertThrows(IllegalArgumentException.class,
-                () -> new RegistroAsistencia(COLABORADOR, FECHA, LocalTime.NOON, LocalTime.of(8, 0)));
-        assertThrows(IllegalArgumentException.class, () -> new RegistroAsistencia("", FECHA, null, null));
-        assertThrows(IllegalArgumentException.class, () -> new RegistroAsistencia(COLABORADOR, null, null, null));
     }
 }

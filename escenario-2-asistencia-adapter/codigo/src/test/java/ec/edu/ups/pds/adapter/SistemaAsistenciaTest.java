@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+/** Client: el sistema funciona igual con cualquier proveedor y no conoce al fabricante. */
 class SistemaAsistenciaTest {
 
     private static final ZoneId ZONA = ZoneId.of("America/Guayaquil");

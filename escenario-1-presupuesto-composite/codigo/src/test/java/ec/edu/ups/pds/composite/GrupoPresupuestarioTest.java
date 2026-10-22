@@ -1,53 +1,28 @@
 package ec.edu.ups.pds.composite;
 
+import static ec.edu.ups.pds.composite.PresupuestoDeEjemplo.SALTO;
+import static ec.edu.ups.pds.composite.PresupuestoDeEjemplo.assertValor;
+import static ec.edu.ups.pds.composite.PresupuestoDeEjemplo.partida;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-class PresupuestoCompositeTest {
-
-    private static final String SALTO = System.lineSeparator();
+/** Composite: grupo presupuestario con partidas u otros grupos. */
+class GrupoPresupuestarioTest {
 
     private GrupoPresupuestario tecnologias;
     private GrupoPresupuestario infraestructura;
 
-    /** Ejemplo del enunciado: TI -> Licenciamiento, Infraestructura (3 partidas), Servicios. */
     @BeforeEach
     void armarPresupuesto() {
-        infraestructura = new GrupoPresupuestario("TI.02", "Infraestructura");
-        infraestructura.agregar(partida("TI.02.01", "Servidores", "45000.00"));
-        infraestructura.agregar(partida("TI.02.02", "Almacenamiento", "18500.00"));
-        infraestructura.agregar(partida("TI.02.03", "Comunicaciones", "12300.50"));
-
-        tecnologias = new GrupoPresupuestario("TI", "Tecnologias de la Informacion");
-        tecnologias.agregar(partida("TI.01", "Licenciamiento", "30000.00"));
-        tecnologias.agregar(infraestructura);
-        tecnologias.agregar(partida("TI.03", "Servicios", "9800.00"));
-    }
-
-    private static PartidaPresupuestaria partida(String codigo, String descripcion, String valor) {
-        return new PartidaPresupuestaria(codigo, descripcion, new BigDecimal(valor));
-    }
-
-    private static void assertValor(String esperado, BigDecimal real) {
-        assertEquals(0, new BigDecimal(esperado).compareTo(real), "esperado " + esperado + " pero fue " + real);
-    }
-
-    @Test
-    @DisplayName("El valor total de una partida es su valor asignado")
-    void valorTotalDeUnaPartida() {
-        PartidaPresupuestaria licencias = partida("TI.01", "Licenciamiento", "30000.00");
-
-        assertValor("30000.00", licencias.calcularValorTotal());
-        assertEquals("TI.01", licencias.getCodigo());
-        assertEquals("Licenciamiento", licencias.getDescripcion());
+        PresupuestoDeEjemplo ejemplo = PresupuestoDeEjemplo.crear();
+        tecnologias = ejemplo.tecnologias;
+        infraestructura = ejemplo.infraestructura;
     }
 
     @Test
@@ -116,15 +91,11 @@ class PresupuestoCompositeTest {
     }
 
     @Test
-    @DisplayName("Se rechazan codigos, descripciones y valores invalidos")
+    @DisplayName("Se rechazan codigo y descripcion vacios y niveles negativos")
     void rechazoDeValoresInvalidos() {
-        assertThrows(IllegalArgumentException.class, () -> partida("P", "Partida", "-0.01"));
-        assertThrows(IllegalArgumentException.class, () -> new PartidaPresupuestaria("P", "Partida", null));
-        assertThrows(IllegalArgumentException.class, () -> partida(null, "Partida", "1"));
-        assertThrows(IllegalArgumentException.class, () -> partida("  ", "Partida", "1"));
         assertThrows(IllegalArgumentException.class, () -> new GrupoPresupuestario("G", ""));
+        assertThrows(IllegalArgumentException.class, () -> new GrupoPresupuestario(null, "Grupo"));
         assertThrows(IllegalArgumentException.class, () -> tecnologias.mostrarEstructura(-1));
-        assertValor("0", partida("P", "Partida sin fondos", "0").calcularValorTotal());
     }
 
     @Test
@@ -140,37 +111,5 @@ class PresupuestoCompositeTest {
                 "  TI.03 Servicios: 9800.00");
 
         assertEquals(esperado, tecnologias.mostrarEstructura(0));
-    }
-
-    @Test
-    @DisplayName("ConsultaPresupuesto trata igual a una partida y a un grupo")
-    void clienteUniformeConPartidaYGrupo() {
-        ConsultaPresupuesto consulta = new ConsultaPresupuesto();
-        ElementoPresupuestario[] elementos = {partida("TI.01", "Licenciamiento", "30000"), infraestructura};
-
-        for (ElementoPresupuestario elemento : elementos) {
-            String reporte = consulta.generarReporte(elemento);
-            assertTrue(reporte.startsWith(elemento.mostrarEstructura(0) + SALTO));
-            assertTrue(reporte.endsWith("Total " + elemento.getCodigo() + ": "
-                    + elemento.calcularValorTotal().toPlainString()));
-        }
-    }
-
-    @Test
-    @DisplayName("Un nuevo nivel de agrupacion no requiere cambiar el cliente")
-    void nuevoNivelSinModificarElCliente() {
-        ConsultaPresupuesto consulta = new ConsultaPresupuesto();
-        String antes = consulta.generarReporte(tecnologias);
-
-        GrupoPresupuestario nube = new GrupoPresupuestario("TI.02.04", "Nube");
-        GrupoPresupuestario computo = new GrupoPresupuestario("TI.02.04.01", "Computo");
-        computo.agregar(partida("TI.02.04.01.01", "Maquinas virtuales", "5000.00"));
-        nube.agregar(computo);
-        infraestructura.agregar(nube);
-        String despues = consulta.generarReporte(tecnologias);
-
-        assertTrue(antes.endsWith("Total TI: 115600.50"));
-        assertTrue(despues.endsWith("Total TI: 120600.50"));
-        assertTrue(despues.contains(SALTO + "        TI.02.04.01.01 Maquinas virtuales: 5000.00"));
     }
 }
