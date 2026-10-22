@@ -169,10 +169,44 @@ donde se construye el sistema y se elige el proveedor.
 > Borrador. Todo lo marcado con `[COMPLETAR POR EL GRUPO]` depende de lo que el grupo realmente hizo y
 > debe editarse antes de la entrega. No se debe presentar como ocurrido algo que no ocurrió.
 
+### Primera versión (PDF revisado por el docente)
+
+Texto literal de la primera entrega. Se conserva como evidencia de la iteración: el docente observó que
+el prompt pedía a la IA elegir el patrón y que la «recomendación rechazada» era una lista de patrones
+alternativos, no una sugerencia real sobre el diseño o el código. La recomendación aceptada (adaptador
+de objetos) sí es una decisión de diseño y se mantiene en la versión nueva.
+
+**Prompt principal:**
+
+> Eres un experto arquitecto de software. Se te presenta este escenario: una universidad tiene un sistema
+> de asistencia que consulta los registros de un colaborador en una fecha mediante un contrato común y
+> espera datos normalizados (identificación, fecha, hora de ingreso y hora de salida). La universidad
+> adquirió dispositivos biométricos de un nuevo fabricante, cuya biblioteca no puede modificarse y tiene
+> operaciones, parámetros y tipos de datos distintos, ya que devuelve una colección de marcaciones en
+> lugar de la asistencia diaria. El sistema debe mantener su contrato estable, no depender del proveedor
+> y permitir incorporar equipos de otros fabricantes en el futuro. Debes dar una recomendación del patrón
+> estructural más adecuado con su justificación e identificar sus participantes.
+
+**Recomendación aceptada:**
+
+> Recomiendo usar un adaptador de objetos, es decir, que el adaptador contenga a la biblioteca del
+> fabricante y le delegue las llamadas en lugar de heredar de ella. Como la biblioteca no puede
+> modificarse y podría cambiar en futuras versiones, conviene depender lo menos posible de su
+> implementación interna. Así, el adaptador solo usa sus operaciones públicas y el sistema sigue
+> trabajando únicamente con su contrato común. Si en el futuro se incorporan equipos de otros
+> proveedores, basta con crear un adaptador nuevo para cada uno sin modificar el resto de la aplicación.
+
+**Recomendación modificada o rechazada:**
+
+> - Facade: simplifica el acceso a un subsistema, pero no adapta la biblioteca a un contrato que ya existe.
+> - Bridge: separa abstracción e implementación desde el diseño inicial, y aquí ambos componentes ya existen.
+> - Decorator: agrega comportamiento manteniendo la misma interfaz, pero el problema es traducir una
+>   interfaz distinta.
+
 ### Prompt principal
 
-**Prompt original** (primera versión del PDF): pedía a la IA recomendar el patrón más adecuado y sus
-participantes. Igual que en el escenario 1, delegaba en la IA la decisión que se evalúa en el grupo.
+**Por qué cambia:** el prompt original (ver arriba) delegaba en la IA la decisión que la actividad
+evalúa en el grupo. El prompt mejorado entrega el diseño ya hecho y pide revisión crítica.
 
 **Prompt mejorado** (propuesto; `[COMPLETAR POR EL GRUPO: indicar si se usó, con qué herramienta y en qué fecha]`):
 
@@ -197,7 +231,7 @@ No generes código todavía.
 ### Recomendación aceptada
 
 **Usar un adaptador de objetos (composición) en lugar de un adaptador de clase (herencia).**
-Esta recomendación figura en la primera versión del PDF como respuesta de la IA.
+Esta recomendación figura en la primera versión del PDF como respuesta de la IA (ver arriba).
 `[COMPLETAR POR EL GRUPO: confirmar la herramienta y la respuesta original]`
 
 Justificación: la biblioteca no puede modificarse y puede cambiar en versiones futuras, así que conviene

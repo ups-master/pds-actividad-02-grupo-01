@@ -147,11 +147,46 @@ variante segura y la justificación de la composición.
 > Borrador. Todo lo marcado con `[COMPLETAR POR EL GRUPO]` depende de lo que el grupo realmente hizo y
 > debe editarse antes de la entrega. No se debe presentar como ocurrido algo que no ocurrió.
 
+### Primera versión (PDF revisado por el docente)
+
+Texto literal de la primera entrega. Se conserva como evidencia de la iteración: el docente observó que
+el prompt pedía a la IA elegir el patrón y que la «recomendación rechazada» era una lista de patrones
+alternativos, no una sugerencia real sobre el diseño o el código.
+
+**Prompt principal:**
+
+> Eres un experto arquitecto de software. Se te presenta este escenario: una institución necesita
+> representar su presupuesto en niveles jerárquicos, con partidas individuales y grupos que pueden
+> contener partidas u otros grupos. Ambos deben permitir obtener su código y descripción, calcular su
+> valor total y mostrar su estructura, sin que el cliente tenga que distinguir entre uno y otro. Además,
+> la estructura debe poder crecer sin modificar la lógica que la consulta. Debes dar una recomendación
+> del patrón estructural más adecuado con su justificación e identificar sus participantes.
+
+**Recomendación aceptada:**
+
+> Recomiendo el patrón Composite, porque el presupuesto es una jerarquía parte-todo en la que los grupos
+> pueden contener partidas y otros grupos. Composite define una abstracción común para ambos, así que el
+> cliente puede consultar el valor total o la estructura de cualquier elemento sin saber si es una
+> partida o un grupo. La partida devuelve su valor asignado y el grupo suma recursivamente el de sus
+> elementos. Además, se pueden agregar nuevos niveles sin modificar la lógica que consulta el presupuesto.
+
+**Recomendación modificada o rechazada:**
+
+> Las alternativas al Composite serían:
+>
+> - Condicionales sobre el tipo: el cliente distingue entre partida y grupo. Es simple, pero queda
+>   acoplado a los tipos concretos y hay que modificarlo cada vez que cambia la estructura.
+> - Decorator: envuelve un solo objeto para agregarle comportamiento, así que no sirve para un grupo con
+>   varios elementos.
+> - Visitor: permite añadir operaciones nuevas sin modificar las clases. Complementa al Composite, pero
+>   para tres operaciones es más complejidad de la necesaria.
+> - Iterator: da un recorrido uniforme de la estructura, pero no representa la jerarquía ni calcula los
+>   valores, así que también es un complemento y no una alternativa.
+
 ### Prompt principal
 
-**Prompt original** (el que figura en la primera versión del PDF): pedía a la IA, como «experto
-arquitecto de software», recomendar el patrón más adecuado y sus participantes a partir del enunciado.
-El problema de ese prompt es que delega en la IA la decisión que la actividad evalúa en el grupo.
+**Por qué cambia:** el prompt original (ver arriba) delegaba en la IA la decisión que la actividad
+evalúa en el grupo. El prompt mejorado entrega el diseño ya hecho y pide revisión crítica.
 
 **Prompt mejorado** (propuesto; `[COMPLETAR POR EL GRUPO: indicar si se usó, con qué herramienta y en qué fecha]`):
 
