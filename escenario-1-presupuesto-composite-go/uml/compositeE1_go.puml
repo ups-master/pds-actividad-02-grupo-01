@@ -1,0 +1,80 @@
+@startuml
+title Escenario 1 - Presupuesto institucional con Composite (Go)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' Notacion orientada a Go:
+'  + exportado (Mayuscula) / - no exportado (minuscula)
+'  "nombre tipo" como en Go; sin herencia: interfaces implicitas y structs embebidos.
+
+interface ElementoPresupuestario <<Component>> {
+    + Codigo() string
+    + Descripcion() string
+    + CalcularValorTotal() float64
+    + MostrarEstructura(nivel int) string
+}
+
+class datosElemento <<struct embebido>> {
+    - codigo string
+    - descripcion string
+    --
+    + Codigo() string
+    + Descripcion() string
+}
+
+class PartidaPresupuestaria <<Leaf>> {
+    - datosElemento <<embebido>>
+    - valorAsignado float64
+    --
+    + {static} NuevaPartida(codigo string, descripcion string, valorAsignado float64) *PartidaPresupuestaria
+    + CalcularValorTotal() float64
+    + MostrarEstructura(nivel int) string
+}
+
+class GrupoPresupuestario <<Composite>> {
+    - datosElemento <<embebido>>
+    - elementos []ElementoPresupuestario
+    --
+    + {static} NuevoGrupo(codigo string, descripcion string) *GrupoPresupuestario
+    + Agregar(e ElementoPresupuestario)
+    + Eliminar(e ElementoPresupuestario)
+    + CalcularValorTotal() float64
+    + MostrarEstructura(nivel int) string
+}
+
+class ConsultaPresupuesto <<Client>> {
+    + GenerarReporte(e ElementoPresupuestario) string
+}
+
+' Implementacion implicita de la interfaz (Go no declara "implements")
+PartidaPresupuestaria ..|> ElementoPresupuestario
+GrupoPresupuestario ..|> ElementoPresupuestario
+
+' Composicion por embebido: reemplaza a la clase base abstracta
+PartidaPresupuestaria *-- datosElemento : embebe
+GrupoPresupuestario *-- datosElemento : embebe
+
+' Relacion recursiva que forma el arbol
+GrupoPresupuestario "1" *--> "0..*" ElementoPresupuestario : elementos
+
+ConsultaPresupuesto ..> ElementoPresupuestario : usa
+
+note right of GrupoPresupuestario
+  CalcularValorTotal() = suma de CalcularValorTotal()
+  de cada elemento, sean partidas u otros grupos.
+end note
+
+note left of PartidaPresupuestaria
+  CalcularValorTotal() = valorAsignado
+end note
+
+legend right
+  <<Component>> interfaz comun de partidas y grupos
+  <<Leaf>> partida individual, sin hijos
+  <<Composite>> grupo que guarda elementos y delega en ellos
+  <<Client>> trata igual partidas y grupos
+  <<struct embebido>> datos comunes reutilizados por composicion
+endlegend
+
+@enduml
