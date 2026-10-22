@@ -19,7 +19,7 @@ import (
 const rutaUML = "../../uml/compositeE1_go.puml"
 
 var (
-	reTipo    = regexp.MustCompile(`^(?:interface|class)\s+(\w+)`)
+	reTipo    = regexp.MustCompile(`^(?:interface|struct)\s+(\w+)`)
 	reMetodo  = regexp.MustCompile(`^[+-]\s*(?:\{static\}\s*)?(\w+\(.*)$`)
 	reCampo   = regexp.MustCompile(`^[+-]\s*(\w+)\s+(.+)$`)
 	reRealiza = regexp.MustCompile(`^(\w+)\s+\.\.\|>\s+(\w+)`)

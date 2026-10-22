@@ -1,0 +1,94 @@
+@startuml
+title Escenario 2 - Asistencia de colaboradores con Adapter (Go)
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' Notacion orientada a Go:
+'  + exportado (Mayuscula) / - no exportado (minuscula)
+'  "nombre tipo" como en Go; sin herencia: interfaces implicitas y composicion.
+
+interface ServicioAsistencia <<Target>> {
+    + ConsultarAsistencia(identificacion string, fecha string) RegistroAsistencia
+}
+
+struct RegistroAsistencia {
+    + Identificacion string
+    + Fecha string
+    + HoraIngreso string
+    + HoraSalida string
+}
+
+struct BiometricoInstitucional {
+    - registros []RegistroAsistencia
+    --
+    + {static} NuevoBiometricoInstitucional(registros ...RegistroAsistencia) *BiometricoInstitucional
+    + ConsultarAsistencia(identificacion string, fecha string) RegistroAsistencia
+}
+
+struct TerminalHuellaAdapter <<Adapter>> {
+    - sdk *SdkTerminalHuella
+    --
+    + {static} NuevoTerminalHuellaAdapter(sdk *SdkTerminalHuella) *TerminalHuellaAdapter
+    + ConsultarAsistencia(identificacion string, fecha string) RegistroAsistencia
+}
+
+struct SdkTerminalHuella <<Adaptee>> {
+    - marcaciones []MarcacionTerminal
+    --
+    + {static} NuevoSdkTerminalHuella(marcaciones ...MarcacionTerminal) *SdkTerminalHuella
+    + RecuperarMarcaciones(codigoUsuario string, desdeEpochMs int64, hastaEpochMs int64) []MarcacionTerminal
+}
+
+struct MarcacionTerminal {
+    + CodigoUsuario string
+    + InstanteEpochMs int64
+}
+
+struct SistemaAsistencia <<Client>> {
+    - servicio ServicioAsistencia
+    --
+    + {static} NuevoSistemaAsistencia(servicio ServicioAsistencia) *SistemaAsistencia
+    + ReporteDiario(identificacion string, fecha string) string
+}
+
+' Implementacion implicita de la interfaz (Go no declara "implements")
+BiometricoInstitucional ..|> ServicioAsistencia
+TerminalHuellaAdapter ..|> ServicioAsistencia
+
+' El cliente solo conoce el contrato
+SistemaAsistencia --> ServicioAsistencia : servicio
+
+' Adaptador de objetos: contiene al adaptado y le delega las llamadas
+TerminalHuellaAdapter o--> SdkTerminalHuella : sdk
+
+SdkTerminalHuella *--> "0..*" MarcacionTerminal : marcaciones
+ServicioAsistencia ..> RegistroAsistencia : devuelve
+TerminalHuellaAdapter ..> MarcacionTerminal : traduce
+
+note bottom of TerminalHuellaAdapter
+  ConsultarAsistencia():
+  1. fecha -> rango [desdeEpochMs, hastaEpochMs] del dia
+  2. sdk.RecuperarMarcaciones(identificacion, desde, hasta)
+  3. primera marcacion -> HoraIngreso
+     ultima marcacion -> HoraSalida
+end note
+
+note bottom of SdkTerminalHuella
+  Biblioteca del nuevo fabricante.
+  No se modifica: el adaptador la usa tal cual.
+end note
+
+note bottom of BiometricoInstitucional
+  Dispositivo del proveedor anterior:
+  ya cumple el contrato, no necesita adaptador.
+end note
+
+legend right
+  <<Target>> contrato comun del sistema institucional
+  <<Adaptee>> biblioteca del fabricante con interfaz incompatible
+  <<Adapter>> cumple el Target y traduce las llamadas al Adaptee
+  <<Client>> usa solo el Target, sin conocer el dispositivo
+endlegend
+
+@enduml

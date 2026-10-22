@@ -15,7 +15,7 @@ interface ElementoPresupuestario <<Component>> {
     + MostrarEstructura(nivel int) string
 }
 
-class datosElemento <<struct embebido>> {
+struct datosElemento <<embebido>> {
     - codigo string
     - descripcion string
     --
@@ -23,7 +23,7 @@ class datosElemento <<struct embebido>> {
     + Descripcion() string
 }
 
-class PartidaPresupuestaria <<Leaf>> {
+struct PartidaPresupuestaria <<Leaf>> {
     - datosElemento <<embebido>>
     - valorAsignado float64
     --
@@ -32,7 +32,7 @@ class PartidaPresupuestaria <<Leaf>> {
     + MostrarEstructura(nivel int) string
 }
 
-class GrupoPresupuestario <<Composite>> {
+struct GrupoPresupuestario <<Composite>> {
     - datosElemento <<embebido>>
     - elementos []ElementoPresupuestario
     --
@@ -43,7 +43,7 @@ class GrupoPresupuestario <<Composite>> {
     + MostrarEstructura(nivel int) string
 }
 
-class ConsultaPresupuesto <<Client>> {
+struct ConsultaPresupuesto <<Client>> {
     + GenerarReporte(e ElementoPresupuestario) string
 }
 
@@ -60,12 +60,12 @@ GrupoPresupuestario "1" *--> "0..*" ElementoPresupuestario : elementos
 
 ConsultaPresupuesto ..> ElementoPresupuestario : usa
 
-note right of GrupoPresupuestario
+note top of GrupoPresupuestario
   CalcularValorTotal() = suma de CalcularValorTotal()
   de cada elemento, sean partidas u otros grupos.
 end note
 
-note left of PartidaPresupuestaria
+note top of PartidaPresupuestaria
   CalcularValorTotal() = valorAsignado
 end note
 
@@ -74,7 +74,7 @@ legend right
   <<Leaf>> partida individual, sin hijos
   <<Composite>> grupo que guarda elementos y delega en ellos
   <<Client>> trata igual partidas y grupos
-  <<struct embebido>> datos comunes reutilizados por composicion
+  <<embebido>> datos comunes reutilizados por composicion
 endlegend
 
 @enduml
