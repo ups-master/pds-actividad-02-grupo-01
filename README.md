@@ -101,9 +101,6 @@ cd escenario-2-asistencia-adapter-go/codigo && go test ./...
 
 ## Conclusiones de la actividad
 
-> Borrador de exactamente 200 palabras (sin contar esta nota).
-> `[COMPLETAR POR EL GRUPO: revisar que la dificultad y la limitación de la IA reflejen lo que el grupo vivió]`
-
 En el primer escenario aplicamos Composite porque el presupuesto es una jerarquía parte-todo: partidas y grupos comparten la abstracción `ElementoPresupuestario`, el grupo suma recursivamente a sus elementos y el cliente no distingue entre ambos. En el segundo aplicamos Adapter de objetos porque la biblioteca del fabricante tiene una interfaz incompatible y no puede modificarse; `TerminalHuellaAdapter` implementa el contrato institucional, convierte la fecha en milisegundos, ordena las marcaciones y traduce los errores del SDK.
 
 Una dificultad real fue definir el día de asistencia: una marcación cercana a medianoche cambia de fecha según la zona horaria, así que fijamos el rango [00:00, 24:00) de la zona institucional y lo comprobamos con pruebas de borde. En Composite, evitar ciclos y elementos repetidos exigió una búsqueda recursiva antes de agregar.
