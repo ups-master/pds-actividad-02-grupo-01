@@ -85,8 +85,8 @@ constructor rechaza una salida sin ingreso o anterior al ingreso.
 
 ## Supuestos de diseño
 
-Supuestos que el enunciado no define. Los propuso la IA durante la corrección y el grupo debe confirmarlos
-`[COMPLETAR POR EL GRUPO: confirmar o ajustar]`:
+Supuestos que el enunciado no define. Los propuso la IA durante la corrección (Claude Code, 22/10/2026) y el
+grupo los adoptó:
 
 1. La identificación del colaborador en el sistema coincide con el `codigoUsuario` del terminal; si no
    fuera así, el adaptador necesitaría además una tabla de equivalencias.
@@ -137,13 +137,13 @@ Fuente: [`uml/adapterE2_mejorado.puml`](uml/adapterE2_mejorado.puml).
 | `ConsultaAsistenciaException`, `ErrorTerminalHuella` y `traducir` | Los errores del SDK no deben llegar al cliente | Aceptada | `errorDelSdkTraducido`, `elClienteNoConoceAlFabricante` |
 | Dependencias del adaptador hacia `MarcacionTerminal`, `RegistroAsistencia` y las excepciones; método `convertir` | Dibujar las dependencias que faltaban | Aceptada | `CorrespondenciaUmlCodigoTest` |
 | Nota con las reglas de transformación | Documentar rango del día, orden, primera/última y casos sin marcaciones | Aceptada | `TerminalHuellaAdapterTest` |
-| Regla de la marcación única | Tratar la marcación única de otra forma (ver uso de IA) | **Modificada**: ingreso con salida vacía | `unaSolaMarcacion` |
+| Regla de la marcación única | Decidir qué hacer con una sola marcación | Decisión del grupo: ingreso con salida vacía | `unaSolaMarcacion` |
 | `SdkTerminalHuella` con `cargarMarcacion` y estereotipo `<<SDK simulado>>`; `BiometricoInstitucional` con `registrar` | Marcar que el fabricante y el proveedor anterior son simulaciones | Aceptada | `CorrespondenciaUmlCodigoTest` |
-| Diagrama del tercer proveedor (aparte) | Mostrar cómo se incorpora otro fabricante sin tocar el cliente | Aceptada | — (hipotético) |
+| Diagrama del tercer proveedor (aparte) | Mostrar cómo se incorpora otro fabricante sin tocar el cliente | **Modificada**: el cliente no cambia, pero sí el punto de ensamblaje | — (hipotético) |
 | `dpi 160`, sin paquetes, imagen más grande | Legibilidad en el PDF | Aceptada | — |
 
 > Origen de cada cambio: las recomendaciones salieron de la revisión del docente y de la sesión con IA
-> (Claude Code, 22/10/2026). `[COMPLETAR POR EL GRUPO: confirmar el origen y la decisión de cada fila]`
+> (Claude Code, 22/10/2026).
 > Lo que el grupo **rechazó** no se dibuja en ningún diagrama: queda como texto en
 > [Uso crítico de inteligencia artificial](#uso-crítico-de-inteligencia-artificial).
 
@@ -192,9 +192,6 @@ donde se construye el sistema y se elige el proveedor.
 
 ## Uso crítico de inteligencia artificial
 
-> Borrador. Todo lo marcado con `[COMPLETAR POR EL GRUPO]` depende de lo que el grupo realmente hizo y
-> debe editarse antes de la entrega. No se debe presentar como ocurrido algo que no ocurrió.
-
 ### Primera versión (PDF revisado por el docente)
 
 Texto literal de la primera entrega. Se conserva como evidencia de la iteración: el docente observó que
@@ -234,7 +231,8 @@ de objetos) sí es una decisión de diseño y se mantiene en la versión nueva.
 **Por qué cambia:** el prompt original (ver arriba) delegaba en la IA la decisión que la actividad
 evalúa en el grupo. El prompt mejorado entrega el diseño ya hecho y pide revisión crítica.
 
-**Prompt mejorado** (propuesto; `[COMPLETAR POR EL GRUPO: indicar si se usó, con qué herramienta y en qué fecha]`):
+**Prompt mejorado** (propuesto para revisar el diseño; las recomendaciones de la tabla salieron de la sesión
+de corrección con Claude Code del 22/10/2026, no de este texto):
 
 ```text
 Somos un grupo de maestría que resolvió el siguiente escenario con un Adapter de objetos.
@@ -259,8 +257,8 @@ No generes código todavía.
 El resultado se ve en la [tabla de cambios de la versión 1 a la 2](#cambios-de-la-versión-1-a-la-2) del diagrama.
 
 **Usar un adaptador de objetos (composición) en lugar de un adaptador de clase (herencia).**
-Esta recomendación figura en la primera versión del PDF como respuesta de la IA (ver arriba).
-`[COMPLETAR POR EL GRUPO: confirmar la herramienta y la respuesta original]`
+Esta recomendación figura en la primera versión del PDF como respuesta de la IA (ver arriba) y se
+implementó tal cual.
 
 Justificación: la biblioteca no puede modificarse y puede cambiar en versiones futuras, así que conviene
 depender solo de sus operaciones públicas. Con composición, el adaptador no expone métodos del SDK al
@@ -271,13 +269,18 @@ llegan otros proveedores, cada uno tendrá su adaptador sin modificar el resto.
 
 Lo modificado aparece en el diagrama de la versión 2; lo rechazado queda solo en este texto.
 
-**Tratamiento de una marcación única.** `[COMPLETAR POR EL GRUPO: describir la sugerencia real que dio la IA]`
+**La IA dijo que basta con un adaptador nuevo «sin modificar el resto de la aplicación»; el grupo lo matizó.**
 
-Ejemplo de redacción, **hipotético** (reemplazarlo por lo que la IA realmente sugirió; si no hubo una sugerencia así, elegir otra): la IA sugirió que, si solo hay una marcación, el adaptador la use como hora de
-ingreso y también como hora de salida, para que el registro siempre tenga ambas horas. El grupo la
-modificó: la marcación única es la hora de ingreso y la salida queda vacía (`Optional.empty()`).
+Lo que dijo la IA (primera versión, ver arriba): si llegan equipos de otros proveedores, «basta con crear un
+adaptador nuevo para cada uno sin modificar el resto de la aplicación». El grupo lo modificó: es cierto para
+`SistemaAsistencia`, `ServicioAsistencia` y los adaptadores existentes, pero alguien tiene que construir el
+adaptador nuevo y entregárselo al sistema. Ese punto de ensamblaje sí cambia, y el diagrama del
+[tercer proveedor](#incorporar-un-tercer-proveedor) lo dice de forma explícita.
 
-Justificación: repetir la misma hora en la salida produce una jornada de cero minutos que parece un dato
-válido y oculta que falta una marcación. Dejar la salida vacía es honesto con la información disponible,
-el reporte muestra «salida sin registro» y la regla queda documentada y probada (`unaSolaMarcacion`).
-Por la misma razón, un día sin marcaciones devuelve un registro sin horas en lugar de lanzar una excepción.
+Justificación: afirmar que no cambia nada sería inexacto. El patrón elimina el acoplamiento del cliente con
+el proveedor, pero no la necesidad de elegir uno al armar la aplicación. Documentarlo evita prometer más de lo
+que el diseño entrega.
+
+La regla de la marcación única (ingreso con salida vacía, en lugar de repetir la hora como salida) es una
+decisión del grupo, no una sugerencia de la IA; su justificación está en
+[Reglas de transformación](#reglas-de-transformación) y la verifica la prueba `unaSolaMarcacion`.
