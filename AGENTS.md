@@ -8,23 +8,28 @@ Actividad 02 de Patrones de Diseño de Software (UPS, Maestría en Software): do
 estructurales. Trabajo académico evaluado con rúbrica: la **correspondencia UML ↔ código** y la
 documentación (informes, uso crítico de IA) pesan tanto como el código. Idioma del repo: español.
 
-| Escenario | Patrón | Carpeta |
-|---|---|---|
-| 1 Presupuesto institucional | Composite | `escenario-1-presupuesto-composite/` |
-| 2 Asistencia biométrica | Adapter | `escenario-2-asistencia-adapter/` |
+| Escenario | Patrón | Carpeta (Java, oficial) | Alternativa en Go |
+|---|---|---|---|
+| 1 Presupuesto institucional | Composite | `escenario-1-presupuesto-composite/` | `escenario-1-presupuesto-composite-go/` |
+| 2 Asistencia biométrica | Adapter | `escenario-2-asistencia-adapter/` | `escenario-2-asistencia-adapter-go/` |
+
+La versión de Java es la que describen los informes, la trazabilidad y el PDF. Las carpetas `*-go` son
+una implementación alternativa del mismo diseño: no están en el POM y no reemplazan a la de Java.
 
 El enunciado oficial está en `docs/actividad_02_patrones_estructurales.md`. Cada escenario tiene su
 informe (`README.md`), diagramas (`uml/`), código (`codigo/`) y `docs/trazabilidad-uml-codigo.md`.
 
 ## Comandos
 
-Java 21 y Maven 3.9+. El POM padre de la raíz agrega los dos módulos `*/codigo`.
+Java 21 y Maven 3.9+. El POM padre de la raíz agrega los dos módulos `*/codigo` de Java (36 pruebas).
 
 ```text
 mvn test
 mvn test -pl escenario-1-presupuesto-composite/codigo
 mvn test -Dtest=NombreDeLaClase#metodo
 ```
+
+Go 1.25+, por separado: `cd escenario-N-...-go/codigo && go test ./...`
 
 ## Convenciones
 
@@ -36,6 +41,11 @@ mvn test -Dtest=NombreDeLaClase#metodo
 - Clases auxiliares que no son participantes (`Demo`) se excluyen en `FUERA_DEL_MODELO` de esa prueba.
 - Dos diagramas por escenario: `*_original.puml` (primera entrega, no se edita ni se implementa) y
   `*_mejorado.puml` (implementado). Lo rechazado de la IA no se dibuja, queda en el informe.
+- El escenario 2 tiene además `adapterE2_tercer_proveedor.puml`: extensión hipotética, no implementada.
+- Go tiene su propio diagrama (`compositeE1_go.puml`, `adapterE2_go.puml`) y su propia prueba de
+  correspondencia (`correspondencia_uml_codigo_test.go`).
 - PNG: PlantUML 1.2024.7 + Graphviz; comando en `codigo/README.md` de cada escenario.
-- Texto de uso de IA y decisiones del grupo: no inventar evidencia; marcar `[COMPLETAR POR EL GRUPO]`.
+- Texto de uso de IA y decisiones del grupo: no inventar evidencia. Lo que el grupo no haya confirmado
+  se marca `[COMPLETAR POR EL GRUPO]`; hoy los README de Java no tienen marcas pendientes.
+- No se reescribe el historial de git (el remoto es `origin/main`); los borrados se hacen con un commit nuevo.
 - El PDF de entrega lo regenera el grupo.
