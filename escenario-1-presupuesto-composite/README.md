@@ -83,8 +83,8 @@ Todas lanzan `IllegalArgumentException` con mensajes en ASCII.
 
 ## Supuestos de diseño
 
-Supuestos que el enunciado no define. Los propuso la IA durante la corrección y el grupo debe confirmarlos
-`[COMPLETAR POR EL GRUPO: confirmar o ajustar]`:
+Supuestos que el enunciado no define. Los propuso la IA durante la corrección (Claude Code, 22/10/2026) y el
+grupo los adoptó:
 
 1. Los valores son montos en una sola moneda; se usa `BigDecimal` para evitar errores de redondeo y la
    estructura muestra dos decimales (redondeo `HALF_UP`) solo al presentar.
@@ -134,7 +134,7 @@ Fuente: [`uml/compositeE1_mejorado.puml`](uml/compositeE1_mejorado.puml).
 | Parámetro `e` renombrado a `elemento`; `dpi 200` | Legibilidad | Aceptada | — |
 
 > Origen de cada cambio: las recomendaciones salieron de la revisión del docente y de la sesión con IA
-> (Claude Code, 22/10/2026). `[COMPLETAR POR EL GRUPO: confirmar el origen y la decisión de cada fila]`
+> (Claude Code, 22/10/2026).
 > Lo que el grupo **rechazó** no se dibuja en ningún diagrama: queda como texto en
 > [Uso crítico de inteligencia artificial](#uso-crítico-de-inteligencia-artificial).
 
@@ -168,9 +168,6 @@ Fuente: [`uml/compositeE1_mejorado.puml`](uml/compositeE1_mejorado.puml).
 - Trazabilidad UML-código: [`docs/trazabilidad-uml-codigo.md`](docs/trazabilidad-uml-codigo.md)
 
 ## Uso crítico de inteligencia artificial
-
-> Borrador. Todo lo marcado con `[COMPLETAR POR EL GRUPO]` depende de lo que el grupo realmente hizo y
-> debe editarse antes de la entrega. No se debe presentar como ocurrido algo que no ocurrió.
 
 ### Primera versión (PDF revisado por el docente)
 
@@ -213,7 +210,8 @@ alternativos, no una sugerencia real sobre el diseño o el código.
 **Por qué cambia:** el prompt original (ver arriba) delegaba en la IA la decisión que la actividad
 evalúa en el grupo. El prompt mejorado entrega el diseño ya hecho y pide revisión crítica.
 
-**Prompt mejorado** (propuesto; `[COMPLETAR POR EL GRUPO: indicar si se usó, con qué herramienta y en qué fecha]`):
+**Prompt mejorado** (propuesto para revisar el diseño; las recomendaciones de la tabla salieron de la sesión
+de corrección con Claude Code del 22/10/2026, no de este texto):
 
 ```text
 Somos un grupo de maestría que resolvió el siguiente escenario con el patrón Composite.
@@ -237,10 +235,13 @@ No generes código todavía.
 
 El resultado se ve en la [tabla de cambios de la versión 1 a la 2](#cambios-de-la-versión-1-a-la-2) del diagrama.
 
-**Dejar `agregar` y `eliminar` solo en `GrupoPresupuestario` (variante segura).**
-`[COMPLETAR POR EL GRUPO: confirmar que esta recomendación vino de la IA y en qué momento; si no, reemplazarla por la que sí se aceptó]`
+**Composite con suma recursiva y cliente sin distinción de tipo.** Es la recomendación de la primera
+versión (ver arriba): la partida devuelve su valor asignado, el grupo suma recursivamente el de sus
+elementos y se pueden agregar niveles sin modificar la lógica que consulta el presupuesto. Se implementó
+tal cual: `calcularValorTotal()` recursivo con `BigDecimal` y `ConsultaPresupuesto` sin `instanceof`.
 
-Justificación: una partida no tiene hijos; si el Component declarara `agregar`, la partida tendría que
+Justificación: el escenario pide tratar partidas y grupos con una misma abstracción. A esa base el grupo
+añadió una decisión propia, `agregar` y `eliminar` solo en `GrupoPresupuestario` (variante segura): una partida no tiene hijos; si el Component declarara `agregar`, la partida tendría que
 lanzar una excepción y el error se detectaría en ejecución. Con la variante segura el compilador impide
 agregar elementos a una partida. Aceptamos el costo de que quien arma el árbol use el tipo concreto
 `GrupoPresupuestario`, porque el enunciado exige uniformidad en las operaciones de consulta, no en la
@@ -255,7 +256,6 @@ Lo modificado aparece en el diagrama de la versión 2; lo rechazado queda solo e
 Lo que ocurrió: durante la corrección (22/10/2026, con Claude Code), la IA recomendó dibujar la relación
 grupo → elementos como agregación, con el argumento de que los elementos se crean fuera del grupo y se
 pasan a `agregar()`. El grupo respondió que en Composite la relación es de composición y la mantuvo.
-`[COMPLETAR POR EL GRUPO: ampliar o corregir con su propio razonamiento]`
 
 Justificación: en el dominio, una partida o un subgrupo existe en el presupuesto solo como parte de un
 grupo y pertenece a uno solo; al eliminarlo sale del presupuesto. Que el objeto se cree fuera y luego se
